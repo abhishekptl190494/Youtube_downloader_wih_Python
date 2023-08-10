@@ -1,6 +1,7 @@
 import os
 from pytube import YouTube
 import re
+import openai
 
 link='https://www.youtube.com/watch?v=Epz7-L-NJnA'
 yt= YouTube(link)
@@ -36,6 +37,37 @@ os.rename(basename, audio_file)
 
 mp3 = youtube_audio_downloader(link)
 print(mp3)
+
+
+#loadinf opeai api key
+
+with open('key.txt', 'r') as f:
+    api_key = f.read().strip('\n')
+    assert api_key.startswith('sk-')
+openai.api_key = api_key
+
+def transcribe(audio_file):
+    if not os.path.exists(audio_file):
+        print('audio does not exist')
+        return False
+    
+    with open(audio_file, 'rb') as f:
+        print('start transcribe..', end='')
+        transcipt = openai.Audio.transcribe('whisper-1', f)
+        print('done')
+
+        name, extension = os.path.splitext(audio_file)
+        transcript_name= f'transcipt-{name}.txt'
+        with open(transcript_name, 'w')as f:
+            f.write(transcribe['text'])
+
+    return transcript_name
+transcript_name = transcribe(mp3)
+with open(transcript_name) as f:
+    print(f.read())
+
+
+
     
    
     
