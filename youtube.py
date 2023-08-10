@@ -66,6 +66,35 @@ transcript_name = transcribe(mp3)
 with open(transcript_name) as f:
     print(f.read())
 
+    if not os.path.exists(transcript_name):
+        print('transcript does not exists')
+        
+    with open(transcript_name)as f:
+        transcript = f.read()
+
+    system_prompt = 'I want to act as a Life coach'
+    prompt = f'''create a summary of the following text.
+    Text: {transcript}
+
+    ...sdsdsd...sdsdsd...sdsdsd...dfgf.g.fg.f.gfg...gfgfgfgds....'''
+
+    print('start summarizing', end='')
+    response = openai.ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=[
+            {'role':'system', 'content': system_prompt},
+            {'role':'user', 'content': prompt}
+        ],
+        max_tokens=2048,
+        temperature=1
+    )
+    print('done')
+r=response['choices'][0]['message']['content']
+
+
+
+    
+
 
 
     
